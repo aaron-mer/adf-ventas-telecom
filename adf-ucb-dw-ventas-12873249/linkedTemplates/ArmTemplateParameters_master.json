@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-ucb-dw-ventas-12873249"
+		},
+		"ls_sa_raw_ventas_connectionString": {
+			"value": ""
+		},
+		"ls_sql_dw_ventas_password": {
+			"value": ""
+		},
+		"ls_sql_dw_ventas_properties_typeProperties_server": {
+			"value": "sql-ucb-sisinfo-ventas-delta12873249.database.windows.net"
+		},
+		"ls_sql_dw_ventas_properties_typeProperties_database": {
+			"value": "dw_ventas_delta"
+		},
+		"ls_sql_dw_ventas_properties_typeProperties_userName": {
+			"value": "Aaron"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

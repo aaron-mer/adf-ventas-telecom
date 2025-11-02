@@ -1,0 +1,2396 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Nombre de instancia de Data Factory",
+			"defaultValue": "adf-ucb-dw-ventas-12873249"
+		},
+		"ls_sa_raw_ventas_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"ls_sa_raw_ventas\""
+		},
+		"ls_sql_dw_ventas_password": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"password\"de \"ls_sql_dw_ventas\""
+		},
+		"ls_sql_dw_ventas_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "sql-ucb-sisinfo-ventas-delta12873249.database.windows.net"
+		},
+		"ls_sql_dw_ventas_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "dw_ventas_delta"
+		},
+		"ls_sql_dw_ventas_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "Aaron"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_Bronze_CLientes')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_Bronze_Cargar_Clientes",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "BRONZE"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_Bronze_Cargar_Clientes')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_Bronze_Clientes_BD_GEN')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_Bronze_Cargar_Clientes_BD_GEN",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "BRONZE"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_Bronze_Cargar_Clientes_BD_GEN')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_Bronze_Clientes_location')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_Bronze_Cargar_Clientes_location",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "BRONZE"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_Bronze_Cargar_Clientes_location')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_Bronze_Detalle_ventas')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_Bronze_Cargar_Detalle_ventas",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "BRONZE"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_Bronze_Cargar_Detalle_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_Bronze_Productos')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_Bronze_Cargar_Productos",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "BRONZE"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_Bronze_Cargar_Productos')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_Bronze_Productos_CAT_MANT')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_Bronze_Cargar_Productos_CAT_MANT",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "BRONZE"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_Bronze_Cargar_Productos_CAT_MANT')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_Silver_Clientes')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_Silver_Clientes",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "SILVER"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_Silver_Clientes')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_Silver_Clientes_BD_GEN')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_Silver_Clientes_BD_GEN",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "SILVER"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_Silver_Clientes_BD_GEN')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_Silver_Clientes_location')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_Silver_Clientes_location",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "SILVER"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_Silver_Clientes_location')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_Silver_Detalle_ventas')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_Silver_Detalle_ventas",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "SILVER"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_Silver_Detalle_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_Silver_Productos')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_Silver_Productos",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "SILVER"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_Silver_Productos')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline_Silver_Productos_CAT_MANT')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Data flow1",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "df_Silver_Productos_CAT_MANT",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"source1": {},
+									"sink1": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "SILVER"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/df_Silver_Productos_CAT_MANT')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Clientes_BD_GEN_csv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sa_raw_ventas",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "BRONZE"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Clientes_BD-GEN.csv",
+						"container": "raw-ventas"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "CID",
+						"type": "String"
+					},
+					{
+						"name": "BDATE",
+						"type": "String"
+					},
+					{
+						"name": "GEN",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sa_raw_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Clientes_csv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sa_raw_ventas",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "BRONZE"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Clientes.csv",
+						"container": "raw-ventas"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "cst_id",
+						"type": "String"
+					},
+					{
+						"name": "cst_key",
+						"type": "String"
+					},
+					{
+						"name": "cst_firstname",
+						"type": "String"
+					},
+					{
+						"name": "cst_lastname",
+						"type": "String"
+					},
+					{
+						"name": "cst_marital_status",
+						"type": "String"
+					},
+					{
+						"name": "cst_gndr",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sa_raw_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Clientes_location_csv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sa_raw_ventas",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "BRONZE"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Clientes_location.csv",
+						"container": "raw-ventas"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "CID",
+						"type": "String"
+					},
+					{
+						"name": "CNTRY",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sa_raw_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Detalle_ventas_csv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sa_raw_ventas",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "BRONZE"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Detalle_ventas.csv",
+						"container": "raw-ventas"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "sls_ord_num",
+						"type": "String"
+					},
+					{
+						"name": "sls_prd_key",
+						"type": "String"
+					},
+					{
+						"name": "sls_cust_id",
+						"type": "String"
+					},
+					{
+						"name": "sls_order_dt",
+						"type": "String"
+					},
+					{
+						"name": "sls_ship_dt",
+						"type": "String"
+					},
+					{
+						"name": "sls_sales",
+						"type": "String"
+					},
+					{
+						"name": "sls_quantity",
+						"type": "String"
+					},
+					{
+						"name": "sls_price",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sa_raw_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Productos_CAT_MANT_csv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sa_raw_ventas",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "BRONZE"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Productos_CAT_MANT.csv",
+						"container": "raw-ventas"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "ID",
+						"type": "String"
+					},
+					{
+						"name": "CAT",
+						"type": "String"
+					},
+					{
+						"name": "SUBCAT",
+						"type": "String"
+					},
+					{
+						"name": "MAINTENANCE",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sa_raw_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Productos_csv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sa_raw_ventas",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "BRONZE"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Productos.csv",
+						"container": "raw-ventas"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "prd_id",
+						"type": "String"
+					},
+					{
+						"name": "prd_key",
+						"type": "String"
+					},
+					{
+						"name": "prd_nm",
+						"type": "String"
+					},
+					{
+						"name": "prd_cost",
+						"type": "String"
+					},
+					{
+						"name": "prd_line",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sa_raw_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_Bronze_CLientes')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_dw_ventas",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "BRONZE"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "cst_id",
+						"type": "varchar"
+					},
+					{
+						"name": "cst_key",
+						"type": "varchar"
+					},
+					{
+						"name": "cst_firstname",
+						"type": "varchar"
+					},
+					{
+						"name": "cst_lastname",
+						"type": "varchar"
+					},
+					{
+						"name": "cst_marital_status",
+						"type": "varchar"
+					},
+					{
+						"name": "cst_gndr",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "BRONZE",
+					"table": "Clientes"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_dw_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_Bronze_Clientes_BD_GEN')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_dw_ventas",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "BRONZE"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CID",
+						"type": "varchar"
+					},
+					{
+						"name": "BDATE",
+						"type": "varchar"
+					},
+					{
+						"name": "GEN",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "BRONZE",
+					"table": "Clientes_BD_GEN"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_dw_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_Bronze_Clientes_location')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_dw_ventas",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "BRONZE"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CID",
+						"type": "varchar"
+					},
+					{
+						"name": "CNTRY",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "BRONZE",
+					"table": "Clientes_location"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_dw_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_Bronze_Detalle_ventas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_dw_ventas",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "BRONZE"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "sls_ord_num",
+						"type": "varchar"
+					},
+					{
+						"name": "sls_prd_key",
+						"type": "varchar"
+					},
+					{
+						"name": "sls_cust_id",
+						"type": "varchar"
+					},
+					{
+						"name": "sls_order_dt",
+						"type": "varchar"
+					},
+					{
+						"name": "sls_ship_dt",
+						"type": "varchar"
+					},
+					{
+						"name": "sls_sales",
+						"type": "varchar"
+					},
+					{
+						"name": "sls_quantity",
+						"type": "varchar"
+					},
+					{
+						"name": "sls_price",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "BRONZE",
+					"table": "Detalle_ventas"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_dw_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_Bronze_Productos')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_dw_ventas",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "BRONZE"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "prd_id",
+						"type": "varchar"
+					},
+					{
+						"name": "prd_key",
+						"type": "varchar"
+					},
+					{
+						"name": "prd_nm",
+						"type": "varchar"
+					},
+					{
+						"name": "prd_cost",
+						"type": "varchar"
+					},
+					{
+						"name": "prd_line",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "BRONZE",
+					"table": "Productos"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_dw_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_Bronze_Productos_CAT_MANT')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_dw_ventas",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "BRONZE"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ID",
+						"type": "varchar"
+					},
+					{
+						"name": "CAT",
+						"type": "varchar"
+					},
+					{
+						"name": "SUBCAT",
+						"type": "varchar"
+					},
+					{
+						"name": "MAINTENANCE",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "BRONZE",
+					"table": "Productos_CAT_MANT"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_dw_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_SIlver_Clientes')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_dw_ventas",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "SILVER"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "cst_id",
+						"type": "varchar"
+					},
+					{
+						"name": "cst_key",
+						"type": "varchar"
+					},
+					{
+						"name": "cst_firstname",
+						"type": "varchar"
+					},
+					{
+						"name": "cst_lastname",
+						"type": "varchar"
+					},
+					{
+						"name": "cst_marital_status",
+						"type": "varchar"
+					},
+					{
+						"name": "cst_gndr",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "SILVER",
+					"table": "Clientes"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_dw_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_Silver_Clientes_BD_GEN')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_dw_ventas",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "SILVER"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CID",
+						"type": "varchar"
+					},
+					{
+						"name": "BDATE",
+						"type": "varchar"
+					},
+					{
+						"name": "GEN",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "SILVER",
+					"table": "Clientes_BD_GEN"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_dw_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_Silver_Clientes_location')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_dw_ventas",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "SILVER"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "CID",
+						"type": "varchar"
+					},
+					{
+						"name": "CNTRY",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "SILVER",
+					"table": "Clientes_location"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_dw_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_Silver_Detalle_ventas')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_dw_ventas",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "SILVER"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "sls_ord_num",
+						"type": "varchar"
+					},
+					{
+						"name": "sls_prd_key",
+						"type": "varchar"
+					},
+					{
+						"name": "sls_cust_id",
+						"type": "varchar"
+					},
+					{
+						"name": "sls_order_dt",
+						"type": "varchar"
+					},
+					{
+						"name": "sls_ship_dt",
+						"type": "varchar"
+					},
+					{
+						"name": "sls_sales",
+						"type": "varchar"
+					},
+					{
+						"name": "sls_quantity",
+						"type": "varchar"
+					},
+					{
+						"name": "sls_price",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "SILVER",
+					"table": "Detalle_ventas"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_dw_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_Silver_Productos')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_dw_ventas",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "SILVER"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "prd_id",
+						"type": "varchar"
+					},
+					{
+						"name": "prd_key",
+						"type": "varchar"
+					},
+					{
+						"name": "prd_nm",
+						"type": "varchar"
+					},
+					{
+						"name": "prd_cost",
+						"type": "varchar"
+					},
+					{
+						"name": "prd_line",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "SILVER",
+					"table": "Productos"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_dw_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_Silver_Productos_CAT_MANT')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sql_dw_ventas",
+					"type": "LinkedServiceReference"
+				},
+				"folder": {
+					"name": "SILVER"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ID",
+						"type": "varchar"
+					},
+					{
+						"name": "CAT",
+						"type": "varchar"
+					},
+					{
+						"name": "SUBCAT",
+						"type": "varchar"
+					},
+					{
+						"name": "MAINTENANCE",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "SILVER",
+					"table": "Productos_CAT_MANT"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sql_dw_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_sa_raw_ventas')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('ls_sa_raw_ventas_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_sql_dw_ventas')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('ls_sql_dw_ventas_properties_typeProperties_server')]",
+					"database": "[parameters('ls_sql_dw_ventas_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('ls_sql_dw_ventas_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('ls_sql_dw_ventas_password')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Bronze_Cargar_Clientes')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "BRONZE"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Clientes_csv",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_Bronze_CLientes",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(output(",
+						"          cst_id as string,",
+						"          cst_key as string,",
+						"          cst_firstname as string,",
+						"          cst_lastname as string,",
+						"          cst_marital_status as string,",
+						"          cst_gndr as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          cst_id as string,",
+						"          cst_key as string,",
+						"          cst_firstname as string,",
+						"          cst_lastname as string,",
+						"          cst_marital_status as string,",
+						"          cst_gndr as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          cst_id,",
+						"          cst_key,",
+						"          cst_firstname,",
+						"          cst_lastname,",
+						"          cst_marital_status,",
+						"          cst_gndr",
+						"     )) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Clientes_csv')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_Bronze_CLientes')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Bronze_Cargar_Clientes_BD_GEN')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "BRONZE"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Clientes_BD_GEN_csv",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_Bronze_Clientes_BD_GEN",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(output(",
+						"          CID as string,",
+						"          BDATE as string,",
+						"          GEN as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          CID as string,",
+						"          BDATE as string,",
+						"          GEN as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          CID,",
+						"          BDATE,",
+						"          GEN",
+						"     )) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Clientes_BD_GEN_csv')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_Bronze_Clientes_BD_GEN')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Bronze_Cargar_Clientes_location')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "BRONZE"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Clientes_location_csv",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_Bronze_Clientes_location",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(output(",
+						"          CID as string,",
+						"          CNTRY as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          CID as string,",
+						"          CNTRY as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          CID,",
+						"          CNTRY",
+						"     )) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Clientes_location_csv')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_Bronze_Clientes_location')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Bronze_Cargar_Detalle_ventas')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "BRONZE"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Detalle_ventas_csv",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_Bronze_Detalle_ventas",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(output(",
+						"          sls_ord_num as string,",
+						"          sls_prd_key as string,",
+						"          sls_cust_id as string,",
+						"          sls_order_dt as string,",
+						"          sls_ship_dt as string,",
+						"          sls_sales as string,",
+						"          sls_quantity as string,",
+						"          sls_price as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          sls_ord_num as string,",
+						"          sls_prd_key as string,",
+						"          sls_cust_id as string,",
+						"          sls_order_dt as string,",
+						"          sls_ship_dt as string,",
+						"          sls_sales as string,",
+						"          sls_quantity as string,",
+						"          sls_price as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          sls_ord_num,",
+						"          sls_prd_key,",
+						"          sls_cust_id,",
+						"          sls_order_dt,",
+						"          sls_ship_dt,",
+						"          sls_sales,",
+						"          sls_quantity,",
+						"          sls_price",
+						"     )) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Detalle_ventas_csv')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_Bronze_Detalle_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Bronze_Cargar_Productos')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "BRONZE"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Productos_csv",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_Bronze_Productos",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(output(",
+						"          prd_id as string,",
+						"          prd_key as string,",
+						"          prd_nm as string,",
+						"          prd_cost as string,",
+						"          prd_line as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          prd_id as string,",
+						"          prd_key as string,",
+						"          prd_nm as string,",
+						"          prd_cost as string,",
+						"          prd_line as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          prd_id,",
+						"          prd_key,",
+						"          prd_nm,",
+						"          prd_cost,",
+						"          prd_line",
+						"     )) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Productos_csv')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_Bronze_Productos')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Bronze_Cargar_Productos_CAT_MANT')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "BRONZE"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "Productos_CAT_MANT_csv",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_Bronze_Productos_CAT_MANT",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(output(",
+						"          ID as string,",
+						"          CAT as string,",
+						"          SUBCAT as string,",
+						"          MAINTENANCE as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ID as string,",
+						"          CAT as string,",
+						"          SUBCAT as string,",
+						"          MAINTENANCE as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          ID,",
+						"          CAT,",
+						"          SUBCAT,",
+						"          MAINTENANCE",
+						"     )) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Productos_CAT_MANT_csv')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_Bronze_Productos_CAT_MANT')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Silver_Clientes')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "SILVER"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_Bronze_CLientes",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_SIlver_Clientes",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          cst_id as string,",
+						"          cst_key as string,",
+						"          cst_firstname as string,",
+						"          cst_lastname as string,",
+						"          cst_marital_status as string,",
+						"          cst_gndr as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> source1",
+						"source1 derive(cst_id = trim(cst_id),",
+						"          cst_key = trim(cst_key),",
+						"          cst_firstname = trim(cst_firstname),",
+						"          cst_marital_status = trim(cst_marital_status),",
+						"          cst_gndr = trim(cst_gndr)) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          cst_id as string,",
+						"          cst_key as string,",
+						"          cst_firstname as string,",
+						"          cst_lastname as string,",
+						"          cst_marital_status as string,",
+						"          cst_gndr as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          cst_id,",
+						"          cst_key,",
+						"          cst_firstname,",
+						"          cst_lastname,",
+						"          cst_marital_status,",
+						"          cst_gndr",
+						"     )) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sql_Bronze_CLientes')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_SIlver_Clientes')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Silver_Clientes_BD_GEN')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "SILVER"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_Bronze_Clientes_BD_GEN",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_Silver_Clientes_BD_GEN",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          CID as string,",
+						"          BDATE as string,",
+						"          GEN as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> source1",
+						"source1 derive(CID = trim(CID),",
+						"          BDATE = trim(BDATE),",
+						"          GEN = trim(GEN)) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          CID as string,",
+						"          BDATE as string,",
+						"          GEN as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          CID,",
+						"          BDATE,",
+						"          GEN",
+						"     )) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sql_Bronze_Clientes_BD_GEN')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_Silver_Clientes_BD_GEN')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Silver_Clientes_location')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "SILVER"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_Bronze_Clientes_location",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_Silver_Clientes_location",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          CID as string,",
+						"          CNTRY as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> source1",
+						"source1 derive(CID = trim(CID),",
+						"          CNTRY = trim(CNTRY)) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          CID as string,",
+						"          CNTRY as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          CID,",
+						"          CNTRY",
+						"     )) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sql_Bronze_Clientes_location')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_Silver_Clientes_location')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Silver_Detalle_ventas')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "SILVER"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_Bronze_Detalle_ventas",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_Silver_Detalle_ventas",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          sls_ord_num as string,",
+						"          sls_prd_key as string,",
+						"          sls_cust_id as string,",
+						"          sls_order_dt as string,",
+						"          sls_ship_dt as string,",
+						"          sls_sales as string,",
+						"          sls_quantity as string,",
+						"          sls_price as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> source1",
+						"source1 derive(sls_ord_num = trim(sls_ord_num),",
+						"          sls_prd_key = trim(sls_prd_key),",
+						"          sls_cust_id = trim(sls_cust_id),",
+						"          sls_order_dt = trim(sls_order_dt),",
+						"          sls_ship_dt = trim(sls_ship_dt),",
+						"          sls_sales = trim(sls_sales),",
+						"          sls_quantity = trim(sls_quantity),",
+						"          sls_price = trim(sls_price)) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          sls_ord_num as string,",
+						"          sls_prd_key as string,",
+						"          sls_cust_id as string,",
+						"          sls_order_dt as string,",
+						"          sls_ship_dt as string,",
+						"          sls_sales as string,",
+						"          sls_quantity as string,",
+						"          sls_price as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          sls_ord_num,",
+						"          sls_prd_key,",
+						"          sls_cust_id,",
+						"          sls_order_dt,",
+						"          sls_ship_dt,",
+						"          sls_sales,",
+						"          sls_quantity,",
+						"          sls_price",
+						"     )) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sql_Bronze_Detalle_ventas')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_Silver_Detalle_ventas')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Silver_Productos')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "SILVER"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_Bronze_Productos",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_Silver_Productos",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          prd_id as string,",
+						"          prd_key as string,",
+						"          prd_nm as string,",
+						"          prd_cost as string,",
+						"          prd_line as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> source1",
+						"source1 derive(prd_id = trim(prd_id),",
+						"          prd_key = trim(prd_key),",
+						"          prd_nm = trim(prd_nm),",
+						"          prd_cost = trim(prd_cost),",
+						"          prd_line = trim(prd_line)) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          prd_id as string,",
+						"          prd_key as string,",
+						"          prd_nm as string,",
+						"          prd_cost as string,",
+						"          prd_line as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          prd_id,",
+						"          prd_key,",
+						"          prd_nm,",
+						"          prd_cost,",
+						"          prd_line",
+						"     )) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sql_Bronze_Productos')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_Silver_Productos')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/df_Silver_Productos_CAT_MANT')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"folder": {
+					"name": "SILVER"
+				},
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_Bronze_Productos_CAT_MANT",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_sql_Silver_Productos_CAT_MANT",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          ID as string,",
+						"          CAT as string,",
+						"          SUBCAT as string,",
+						"          MAINTENANCE as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     isolationLevel: 'READ_UNCOMMITTED',",
+						"     format: 'table') ~> source1",
+						"source1 derive(ID = trim(ID),",
+						"          CAT = trim(CAT),",
+						"          SUBCAT = trim(SUBCAT),",
+						"          MAINTENANCE = trim(MAINTENANCE)) ~> derivedColumn1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          ID as string,",
+						"          CAT as string,",
+						"          SUBCAT as string,",
+						"          MAINTENANCE as string",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          ID,",
+						"          CAT,",
+						"          SUBCAT,",
+						"          MAINTENANCE",
+						"     )) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_sql_Bronze_Productos_CAT_MANT')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_Silver_Productos_CAT_MANT')]"
+			]
+		}
+	]
+}
