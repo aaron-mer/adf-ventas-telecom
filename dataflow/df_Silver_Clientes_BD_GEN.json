@@ -18,7 +18,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "ds_sql_Bronze_Clientes_BD_GEN",
+						"referenceName": "ds_sql_Silver_Clientes_BD_GEN",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
