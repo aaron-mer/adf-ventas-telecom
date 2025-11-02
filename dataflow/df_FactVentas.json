@@ -1,0 +1,165 @@
+{
+	"name": "df_FactVentas",
+	"properties": {
+		"folder": {
+			"name": "GOLD"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_Silver_Detalle_ventas",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dim_Cliente",
+						"type": "DatasetReference"
+					},
+					"name": "dimCliente"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dim_Producto",
+						"type": "DatasetReference"
+					},
+					"name": "dimProducto"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dim_Tiempo",
+						"type": "DatasetReference"
+					},
+					"name": "dimTiempo"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_FacVentas",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "lookup1"
+				},
+				{
+					"name": "lookup2"
+				},
+				{
+					"name": "lookup3"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          sls_ord_num as string,",
+				"          sls_prd_key as string,",
+				"          sls_cust_id as string,",
+				"          sls_order_dt as string,",
+				"          sls_ship_dt as string,",
+				"          sls_sales as string,",
+				"          sls_quantity as string,",
+				"          sls_price as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source1",
+				"source(output(",
+				"          cst_id as string,",
+				"          id_cliente as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'SELECT\\r\\n  cst_id,      \\r\\n  id_cliente   \\r\\nFROM GOLD.DimCliente\\r\\n',",
+				"     format: 'query') ~> dimCliente",
+				"source(output(",
+				"          id_producto as integer,",
+				"          prd_id as string,",
+				"          prd_key as string,",
+				"          prd_nm as string,",
+				"          prd_cost as string,",
+				"          prd_line as string,",
+				"          CAT as string,",
+				"          SUBCAT as string,",
+				"          MAINTENANCE as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'SELECT\\r\\n  prd_key,       \\r\\n  id_producto    \\r\\nFROM GOLD.DimProducto\\r\\n',",
+				"     format: 'query') ~> dimProducto",
+				"source(output(",
+				"          sls_order_dt as string,",
+				"          sls_ship_dt as string,",
+				"          id_tiempo as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'SELECT\\n  sls_order_dt,\\n  sls_ship_dt,\\n  id_tiempo\\nFROM GOLD.DimTiempo\\n',",
+				"     format: 'query') ~> dimTiempo",
+				"source1, dimCliente lookup(sls_cust_id == cst_id,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup1",
+				"lookup1, dimProducto lookup(sls_prd_key == prd_key,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup2",
+				"lookup2, dimTiempo lookup(sls_ord_num == dimTiempo@sls_order_dt",
+				"     && source1@sls_ship_dt == dimTiempo@sls_ship_dt,",
+				"     multiple: false,",
+				"     pickup: 'any',",
+				"     broadcast: 'auto')~> lookup3",
+				"lookup3 select(mapColumn(",
+				"          sls_sales,",
+				"          sls_quantity,",
+				"          sls_price,",
+				"          id_cliente,",
+				"          id_producto,",
+				"          id_tiempo",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          id_venta as integer,",
+				"          id_cliente as integer,",
+				"          id_producto as integer,",
+				"          id_tiempo as integer,",
+				"          MontoVenta as string,",
+				"          Cantidad as string,",
+				"          PrecioUnitario as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          id_cliente,",
+				"          id_producto,",
+				"          id_tiempo,",
+				"          MontoVenta = sls_sales,",
+				"          Cantidad = sls_quantity,",
+				"          PrecioUnitario = sls_price",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}

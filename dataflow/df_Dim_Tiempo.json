@@ -1,0 +1,64 @@
+{
+	"name": "df_Dim_Tiempo",
+	"properties": {
+		"folder": {
+			"name": "GOLD"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_Silver_Detalle_ventas",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_dim_Tiempo",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          sls_order_dt as string,",
+				"          sls_ship_dt as string,",
+				"          AnioPedido as integer,",
+				"          MesPedido as integer,",
+				"          AnioEnvio as integer,",
+				"          MesEnvio as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'SELECT DISTINCT\\r\\n    s.sls_order_dt,\\r\\n    s.sls_ship_dt,\\r\\n    YEAR(TRY_CAST(s.sls_order_dt AS DATE))  AS AnioPedido,\\r\\n    MONTH(TRY_CAST(s.sls_order_dt AS DATE)) AS MesPedido,\\r\\n    YEAR(TRY_CAST(s.sls_ship_dt AS DATE))   AS AnioEnvio,\\r\\n    MONTH(TRY_CAST(s.sls_ship_dt AS DATE))  AS MesEnvio\\r\\nFROM SILVER.Detalle_ventas s\\r\\nWHERE s.sls_order_dt IS NOT NULL\\r\\n  AND s.sls_ship_dt IS NOT NULL\\r\\n',",
+				"     format: 'query') ~> source1",
+				"source1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          id_tiempo as integer,",
+				"          sls_order_dt as string,",
+				"          sls_ship_dt as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          sls_order_dt,",
+				"          sls_ship_dt",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}
