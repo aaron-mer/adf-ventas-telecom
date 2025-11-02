@@ -1,0 +1,17 @@
+{
+	"name": "ls_sql_dw_ventas",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "sql-ucb-sisinfo-ventas-delta12873249.database.windows.net",
+			"database": "dw_ventas_delta",
+			"encrypt": "mandatory",
+			"trustServerCertificate": false,
+			"authenticationType": "SQL",
+			"userName": "Aaron",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQDg2ODc0ODIyLTI3M0UtNDY3MC1CNUM3LTQ1NEQ5Q0ExQzMwMV9lY2U5NGVlMy0yMmZjLTQ3YWItYTc3Yi00YjA3ZDRjNDg1OTQiDQp9"
+		}
+	}
+}
