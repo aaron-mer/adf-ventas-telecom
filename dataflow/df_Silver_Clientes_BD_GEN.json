@@ -1,15 +1,15 @@
 {
-	"name": "df_Bronze_Cargar_Clientes_location",
+	"name": "df_Silver_Clientes_BD_GEN",
 	"properties": {
 		"folder": {
-			"name": "BRONZE"
+			"name": "SILVER"
 		},
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "Clientes_location_csv",
+						"referenceName": "ds_sql_Bronze_Clientes_BD_GEN",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
@@ -18,26 +18,36 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "ds_sql_Bronze_Clientes_location",
+						"referenceName": "ds_sql_Bronze_Clientes_BD_GEN",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
 				}
 			],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          CID as string,",
-				"          CNTRY as string",
+				"          BDATE as string,",
+				"          GEN as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 sink(allowSchemaDrift: true,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source1",
+				"source1 derive(CID = trim(CID),",
+				"          BDATE = trim(BDATE),",
+				"          GEN = trim(GEN)) ~> derivedColumn1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          CID as string,",
-				"          CNTRY as string",
+				"          BDATE as string,",
+				"          GEN as string",
 				"     ),",
 				"     deletable:false,",
 				"     insertable:true,",
@@ -49,7 +59,8 @@
 				"     errorHandlingOption: 'stopOnFirstError',",
 				"     mapColumn(",
 				"          CID,",
-				"          CNTRY",
+				"          BDATE,",
+				"          GEN",
 				"     )) ~> sink1"
 			]
 		}
